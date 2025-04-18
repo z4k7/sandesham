@@ -28,16 +28,11 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// Then handle production static files and routing
 if (process.env.NODE_ENV === "production") {
-  const frontendBuildPath = path.join(__dirname, "../frontend/dist");
-  
-  // Serve static files
-  app.use(express.static(frontendBuildPath));
-  
-  // Handle client-side routing with a more specific path pattern
-  app.get("/*", (req, res) => {
-    res.sendFile(path.join(frontendBuildPath, "index.html"));
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
   });
 }
 
