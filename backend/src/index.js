@@ -29,10 +29,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  // For Render deployment
+  const frontendBuildPath = path.join(__dirname, "../frontend/dist");
+  console.log("Serving static files from:", frontendBuildPath);
+  
+  app.use(express.static(frontendBuildPath));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    const indexPath = path.join(frontendBuildPath, "index.html");
+    console.log("Serving index from:", indexPath);
+    res.sendFile(indexPath);
   });
 }
 
